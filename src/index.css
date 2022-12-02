@@ -1,70 +1,205 @@
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin: 50px 0px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.wrapper {
+  margin-left: 50px;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.text {
+  top: -50px;
+  position: absolute;
+  font-size: 2rem;
+}
+
+.hangman-container {
+  position: relative;
+  margin-top: 20px;
+}
+
+.horizontal-top-bar {
+  width: 200px;
+  height: 10px;
+  margin-left: 120px;
+  background-color: black;
+}
+
+.horizontal-bottom-bar {
+  width: 250px;
+  height: 10px;
+  background-color: black;
+}
+
+.vertical-left-bar {
+  width: 10px;
+  height: 400px;
+  margin-left: 120px;
+  background-color: black;
+}
+
+.vertical-right-bar {
+  position: absolute;
+  top: 0;
+  left: 310px;
+  width: 10px;
+  height: 60px;
+  background-color: black;
+}
+
+.head {
+  position: absolute;
+  top: 60px;
+  left: 285px;
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  border: 10px solid black;
+}
+
+.body {
+  position: absolute;
+  top: 110px;
+  left: 310px;
+  width: 10px;
+  height: 100px;
+  background-color: black;
+}
+
+.left-arm {
+  position: absolute;
+  top: 150px;
+  left: 210px;
+  width: 100px;
+  height: 10px;
+  background-color: black;
+  rotate: 30deg;
+  transform-origin: right bottom;
+}
+
+.right-arm {
+  position: absolute;
+  top: 150px;
+  left: 320px;
+  width: 100px;
+  height: 10px;
+  background-color: black;
+  rotate: -30deg;
+  transform-origin: left bottom;
+}
+
+.left-leg {
+  position: absolute;
+  top: 200px;
+  left: 220px;
+  width: 100px;
+  height: 10px;
+  background-color: black;
+  rotate: -60deg;
+  transform-origin: right bottom;
+}
+
+.right-leg {
+  position: absolute;
+  top: 200px;
+  left: 310px;
+  width: 100px;
+  height: 10px;
+  background-color: black;
+  rotate: 60deg;
+  transform-origin: left bottom;
+}
+
+.word-container {
+  position: absolute;
+  display: flex;
+  gap: 0.25em;
+  font-family: monospace;
+  font-size: 6rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.letter-wrapper {
+  border-bottom: 0.1em solid black;
+}
+
+.letter-visible {
+  visibility: visible;
+}
+
+.letter-hidden {
+  visibility: hidden;
+}
+
+.keyboard-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 100px;
+  margin-right: 50px;
+}
+
+.keyboard {
+  width: 700px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.button {
+  width: 70px;
+  border: 3px solid black;
+  background: none;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  padding: 0.5rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  color: black;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.button:hover:not(:disabled),
+.button:focus:not(:disabled) {
+  background-color: hsl(200, 100%, 75%);
+}
+
+.button-active {
+  background-color: hsl(200, 100%, 50%);
+  color: white;
+}
+
+.button-inactive {
+  opacity: 0.3;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.red-button {
+  color: red;
+}
+
+.refresh-button {
+  font-size: 34px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.refresh-button:hover {
+  text-decoration: underline;
 }

@@ -1,32 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useCallback, useEffect, useState } from 'react'
+import HangmanDrawing from './components/HangmanDrawing'
+import HangmanWord from './components/HangmanWord'
+import Keyboard from './components/Keyboard'
+import words from './wordList.json'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+
+  const [wordToGuess, setWordToGuess] = useState(() => words[Math.floor(Math.random() * words.length)])
+
+  const [guessedLetters, setGuessedLetters] = useState<string[]>([])
+
+  const incorrectLetters = guessedLetters.filter(letter => !wordToGuess.includes(letter))
+
+  const isLoser = incorrectLetters.length >= 6
+  const isWinner = wordToGuess.split('').every(letter => guessedLetters.includes(letter))
+
+  const refreshWordToGuess = () => {
+    setGuessedLetters([])
+    setWordToGuess(words[Math.floor(Math.random() * words.length)])
+  }
+
+  const addGuessedLetter = useCallback((letter: string) => {
+    if (guessedLetters.includes(letter) || isLoser || isWinner) return
+
+    setGuessedLetters(prev => [...prev, letter])
+  }, [guessedLetters, isWinner, isLoser])
+
+  useEffect(() => {
+    const handler = (evt: KeyboardEvent) => {
+      const key = evt.key
+      if (!key.match(/^[a-z]$/)) return
+      evt.preventDefault()
+      addGuessedLetter(key)
+    }
+    document.addEventListener('keypress', handler)
+    return () => {
+      document.removeEventListener('keypress', handler)
+    }
+  }, [guessedLetters])
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='container'>
+      <div className='wrapper'>
+        <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
+        <HangmanWord reveal={isLoser} guessedLetters={guessedLetters} wordToGuess={wordToGuess} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <div className='keyboard-wrapper'>
+        <div className='text'>
+          {isWinner && 'Winner! - Refresh to try again'}
+          {isLoser && 'Nice try - Refresh to try again'}
+        </div>
+        <button
+          className='refresh-button'
+          onClick={refreshWordToGuess}
+        >
+          Refresh word
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <Keyboard disabled={isWinner || isLoser} activeLetter={guessedLetters.filter(letter => wordToGuess.includes(letter))} inactiveLetters={incorrectLetters} addGuessedLetter={addGuessedLetter} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }
